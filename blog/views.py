@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
-posts = [
+all_posts = [
     {
         "slug": "hike-in-the-mountains",
         "image": "mountains.jpg",
@@ -70,13 +70,20 @@ posts = [
 ]
 
 
+def get_date(post):
+    return post["date"]
+
+
 def index(request):
-    return render(request, "blog/index.html")
+    sorted_posts = sorted(all_posts, key=get_date)
+    latest_posts = sorted_posts[-3:]
+    return render(request, "blog/index.html", {"posts": latest_posts})
 
 
 def posts(request):
-    return render(request, "blog/posts.html")
+    return render(request, "blog/posts.html", {"posts": all_posts})
 
 
 def post_detail(request, slug):
-    return render(request, "blog/post_detail.html")
+    identified_post = next(post for post in all_posts if post["slug"] == slug)
+    return render(request, "blog/post_detail.html", {"post": identified_post})

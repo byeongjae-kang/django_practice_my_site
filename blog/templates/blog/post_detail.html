@@ -6,19 +6,19 @@
 {% endblock %} 
 
 {% block css_files %} 
-<link rel="stylesheet" href="{% static "blog/post_detail.css" %}" /> 
+  <link rel="stylesheet" href="{% static "blog/post_detail.css" %}" /> 
 {% endblock %} 
 
 {% block content %}
 <section id="summary">
-  <h2>asdkfjh{{ post.title }}</h2>
-  <div>
+  <h2>{{ post.title }}</h2>
+  {% comment %} <div>
     {% for tag in post_tags %}
       <span class="tag">{{ tag.caption }}</span>
     {% endfor %}
-  </div>
+  </div> {% endcomment %}
   <article>
-    <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+    <img src="{% static "blog/images/"|add:post.image %}" alt="{{ post.title }}" />
     <address>By <a href="mailto:{{ post.author.email_address }}">{{ post.author }}</a></address>
     <div>Last updated on <time>{{ post.date|date:"d M Y" }}</time></div>
   </article>
