@@ -6,11 +6,24 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Countries"
+
+
 class Address(models.Model):
     street = models.CharField(max_length=200, blank=True)
     city = models.CharField(max_length=50, blank=True)
     province = models.CharField(max_length=50, blank=True)
-    country = models.CharField(max_length=50, blank=True)
+    country = models.ForeignKey(
+        Country, related_name="address", blank=True, on_delete=models.CASCADE
+    )
     postal_code = models.CharField(max_length=6, blank=True)
 
     def __str__(self) -> str:
@@ -45,6 +58,7 @@ class Book(models.Model):
     is_bestselling = models.BooleanField(default=False)
     # Harry Potter 1 => harry-potter-1
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
+    published_country = models.ManyToManyField(Country, null=True)
 
     def get_absolute_url(self):
         return reverse("book-detail", args=[self.slug])
