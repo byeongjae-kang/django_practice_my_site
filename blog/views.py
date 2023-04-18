@@ -32,7 +32,7 @@ class PostDetail(View):
     def get(self, request, slug):
         post = Post.objects.get(slug=slug)
         comments = post.comments.all().order_by("-id")
-        is_saved_for_later = post.id in request.session.get("stored_posts")
+        is_saved_for_later = post.id in request.session.get("stored_posts", {})
         form = CommentForm()
         return render(
             request,
